@@ -378,18 +378,49 @@ td.num { white-space: nowrap; font-variant-numeric: tabular-nums; }
   .admin-topbar { position: relative; z-index: 42; flex: 0 0 auto; gap: 10px; padding: 0 12px; }
   .admin-topbar h1 { flex: 1; min-width: 0; font-size: 16px; }
   .top-link { font-size: 11px; white-space: nowrap; }
-  .admin-main { flex: 1; min-height: 0; overflow: hidden; padding: 14px 12px 18px; }
-  .admin-section.is-active { display: flex; flex-direction: column; gap: 14px; height: 100%; min-height: 0; }
+  .admin-main { flex: 1; width: 100%; min-width: 0; min-height: 0; overflow: hidden; padding: 14px 12px 18px; }
+  .admin-section.is-active { display: flex; flex-direction: column; gap: 14px; width: 100%; min-width: 0; height: 100%; min-height: 0; }
   .admin-menu-backdrop:not([hidden]) { display: block; position: fixed; inset: 0; z-index: 41; background: rgba(5, 20, 15, .42); }
-  .panel { padding: 14px; }
+  .panel { width: 100%; min-width: 0; padding: 14px; }
   .panel-head { align-items: flex-start; flex-direction: column; margin-bottom: 12px; }
-  .panel-fixed { flex: 0 0 auto; }
-  .panel-scroll { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow: hidden; }
+  .panel-fixed { display: flex; flex: 0 0 auto; flex-direction: column; max-height: 58%; overflow: hidden; }
+  .panel-fixed > .panel-head { flex: 0 0 auto; flex-direction: row; align-items: center; margin-bottom: 10px; }
+  .panel-fixed > .admin-form { min-height: 0; overflow-y: auto; }
+  .panel-scroll { display: flex; flex: 1 1 auto; flex-direction: column; min-height: 160px; overflow: hidden; }
   .panel-scroll > .panel-head { flex: 0 0 auto; }
   .panel-scroll > .table-wrap,
-  .panel-scroll > .log-list { flex: 1; min-height: 0; overflow: auto; }
+  .panel-scroll > .log-list { flex: 1; width: 100%; min-width: 0; min-height: 0; overflow: auto; }
+  .panel-scroll > .table-wrap { overscroll-behavior: contain; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
+  .panel-scroll > .table-wrap::-webkit-scrollbar { width: 6px; height: 6px; }
+  .panel-scroll > .table-wrap::-webkit-scrollbar-thumb { border-radius: 999px; background: var(--border); }
   .panel-scroll th { position: sticky; top: 0; z-index: 1; background: var(--surface); }
+  .table-panel > .panel-head { flex-direction: row; align-items: center; flex-wrap: wrap; }
+  .table-panel > .panel-head::after { content: "Swipe →"; margin-left: auto; color: var(--muted); font-size: 10px; font-weight: 700; white-space: nowrap; }
   .admin-scroll-stack { display: grid; flex: 1; min-height: 0; overflow-y: auto; align-content: start; gap: 14px; padding-right: 2px; }
+  .stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .stat-card { gap: 4px; padding: 12px; }
+  .stat-card strong { font-size: 18px; }
+  .stat-card small { font-size: 10px; }
   .admin-form, .inline-form, .detail-grid { grid-template-columns: 1fr; }
+  #planForm, #adminSettingsForm { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 10px; }
+  #planForm label,
+  #adminSettingsForm label,
+  #manualDepositForm label { margin-bottom: 8px; }
+  #planForm input,
+  #adminSettingsForm input,
+  #manualDepositForm input,
+  #manualDepositForm select { min-height: 40px; padding: 8px 10px; }
+  #planForm .check-label,
+  #adminSettingsForm .form-error,
+  #adminSettingsForm .btn,
+  #planForm .form-error,
+  #planForm .btn,
+  #manualDepositForm .form-error,
+  #manualDepositForm .btn { grid-column: 1 / -1; }
+  #planForm .btn,
+  #adminSettingsForm .btn,
+  #manualDepositForm .btn { min-height: 38px; }
+  #planForm .check-label { min-height: 36px; margin-bottom: 8px; }
+  #manualDepositForm .form-error { margin-top: 0; }
   .search { max-width: 100%; }
 }

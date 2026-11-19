@@ -122,14 +122,14 @@
               <button class="btn btn-primary" type="submit" id="planSubmit">Save Plan</button>
             </form>
           </div>
-          <div class="panel panel-scroll">
+          <div class="panel panel-scroll table-panel">
             <div class="panel-head"><h2>Configured plans</h2><span class="muted" id="planCount">0 plans</span></div>
             <div class="table-wrap"><table><thead><tr><th>Plan</th><th>Minimum</th><th>Period</th><th>Actual payout</th><th>Status</th><th>Actions</th></tr></thead><tbody id="planTable"></tbody></table></div>
           </div>
         </section>
 
         <section class="admin-section" data-section="users" hidden>
-          <div class="panel panel-scroll">
+          <div class="panel panel-scroll table-panel">
             <div class="panel-head"><h2>Registered users</h2><input id="userSearch" class="search" type="search" placeholder="Search name or email"></div>
             <div class="table-wrap"><table><thead><tr><th>User</th><th>Status</th><th>Balance</th><th>Invested</th><th>Active</th><th>Actual due</th><th>Actions</th></tr></thead><tbody id="userTable"></tbody></table></div>
           </div>
@@ -145,28 +145,28 @@
               <p class="form-error" id="manualDepositError" role="alert"></p>
             </form>
           </div>
-          <div class="panel panel-scroll">
+          <div class="panel panel-scroll table-panel">
             <div class="panel-head"><h2>Deposit records</h2></div>
             <div class="table-wrap"><table><thead><tr><th>User</th><th>Amount</th><th>Date</th><th>Status</th></tr></thead><tbody id="depositTable"></tbody></table></div>
           </div>
         </section>
 
         <section class="admin-section" data-section="withdrawals" hidden>
-          <div class="panel panel-scroll">
+          <div class="panel panel-scroll table-panel">
             <div class="panel-head"><h2>Withdrawal requests</h2><span class="muted" id="withdrawCount">0 requests</span></div>
             <div class="table-wrap"><table><thead><tr><th>User</th><th>Amount</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead><tbody id="withdrawTable"></tbody></table></div>
           </div>
         </section>
 
         <section class="admin-section" data-section="payouts" hidden>
-          <div class="panel panel-scroll">
+          <div class="panel panel-scroll table-panel">
             <div class="panel-head"><h2>Investments and payouts</h2><span class="muted" id="investmentCount">0 investments</span></div>
             <div class="table-wrap"><table><thead><tr><th>User</th><th>Plan</th><th>Principal</th><th>Actual amount</th><th>Maturity</th><th>Status</th><th>Action</th></tr></thead><tbody id="payoutTable"></tbody></table></div>
           </div>
         </section>
 
         <section class="admin-section" data-section="support" hidden>
-          <div class="panel panel-scroll">
+          <div class="panel panel-scroll table-panel">
             <div class="panel-head">
               <h2>Support inbox</h2>
               <select id="supportFilter" class="search" style="max-width:180px">
