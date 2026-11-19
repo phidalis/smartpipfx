@@ -167,6 +167,9 @@ textarea { resize: vertical; line-height: 1.5; }
 
 .admin-app { display: grid; grid-template-columns: 230px minmax(0, 1fr); min-height: 100vh; }
 
+.admin-menu-toggle { display: none; }
+.admin-menu-backdrop { display: none; }
+
 .admin-sidebar {
   position: sticky;
   top: 0;
@@ -342,7 +345,7 @@ td.num { white-space: nowrap; font-variant-numeric: tabular-nums; }
 @media (max-width: 620px) {
   .auth-card { padding: 22px; }
   .admin-app { grid-template-columns: 72px minmax(0, 1fr); }
-  .admin-sidebar { align-items: center; padding: 14px 8px; }
+  .admin-sidebar { align-items: center; padding: 14px 8px; z-index: 43; }
   .admin-brand { justify-content: center; padding: 0 0 14px; }
   .admin-brand span,
   .admin-nav-item span,
@@ -355,6 +358,25 @@ td.num { white-space: nowrap; font-variant-numeric: tabular-nums; }
   .admin-logout { justify-content: center; padding: 0; }
   .admin-theme { width: 100%; padding: 10px 0 0; }
   .admin-theme-button { min-height: 34px; }
+  .admin-menu-toggle { display: grid; place-items: center; flex: 0 0 38px; width: 38px; height: 38px; min-height: 0; padding: 0; border: 1px solid var(--border); border-radius: 11px; background: var(--soft); color: var(--text); }
+  .admin-menu-toggle .icon { width: 18px; height: 18px; }
+  .admin-topbar { position: relative; z-index: 42; gap: 10px; padding: 0 12px; }
+  .admin-topbar h1 { flex: 1; min-width: 0; font-size: 16px; }
+  .top-link { font-size: 11px; white-space: nowrap; }
+  .admin-menu-backdrop:not([hidden]) { display: block; position: fixed; inset: 0; z-index: 41; background: rgba(5, 20, 15, .42); }
+  .admin-app.is-menu-open { grid-template-columns: 230px minmax(0, 1fr); }
+  .admin-app.is-menu-open .admin-sidebar { align-items: stretch; padding: 14px 10px; box-shadow: 12px 0 32px -18px rgba(3, 20, 14, .7); }
+  .admin-app.is-menu-open .admin-brand { justify-content: flex-start; padding: 0 8px 22px; }
+  .admin-app.is-menu-open .admin-brand span { display: grid; }
+  .admin-app.is-menu-open .admin-nav-item span,
+  .admin-app.is-menu-open .admin-theme-label,
+  .admin-app.is-menu-open .admin-theme-button span,
+  .admin-app.is-menu-open .admin-logout span { display: inline; }
+  .admin-app.is-menu-open .admin-nav-item,
+  .admin-app.is-menu-open .admin-theme-button,
+  .admin-app.is-menu-open .admin-logout { justify-content: flex-start; padding: 0 12px; }
+  .admin-app.is-menu-open .admin-theme { padding: 12px 8px 4px; }
+  .admin-app.is-menu-open .admin-theme-button { min-height: 36px; }
   .admin-form, .inline-form, .detail-grid { grid-template-columns: 1fr; }
   .panel-head { align-items: flex-start; flex-direction: column; }
   .search { max-width: 100%; }

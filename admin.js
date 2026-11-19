@@ -373,17 +373,70 @@
     });
   }
 
+  function isMobileAdminMenu() {
+    return Boolean(window.matchMedia && window.matchMedia("(max-width: 620px)").matches);
+  }
+
+  function isAdminMenuOpen() {
+    const app = $("#adminApp");
+    return Boolean(app && app.classList.contains("is-menu-open"));
+  }
+
+  function setAdminMenu(open) {
+    const app = $("#adminApp");
+    if (!app) return;
+    app.classList.toggle("is-menu-open", open);
+    const backdrop = $("#adminMenuBackdrop");
+    if (backdrop) backdrop.hidden = !open;
+    const toggle = $("#adminMenuToggle");
+    if (toggle) {
+      toggle.setAttribute("aria-expanded", String(open));
+      toggle.setAttribute("aria-label", open ? "Close admin menu" : "Open admin menu");
+    }
+  }
+
   function bindApp() {
     if (appBound) return;
     appBound = true;
 
     $$("[data-admin-section]").forEach((button) => {
-      button.addEventListener("click", () => showSection(button.dataset.adminSection));
+      button.addEventListener("click", () => {
+        if (isMobileAdminMenu() && !isAdminMenuOpen()) {
+          setAdminMenu(true);
+          return;
+        }
+        showSection(button.dataset.adminSection);
+        if (isMobileAdminMenu()) setAdminMenu(false);
+      });
+    });
+
+    const menuToggle = $("#adminMenuToggle");
+    if (menuToggle) {
+      menuToggle.addEventListener("click", () => setAdminMenu(!isAdminMenuOpen()));
+    }
+
+    const menuBackdrop = $("#adminMenuBackdrop");
+    if (menuBackdrop) {
+      menuBackdrop.addEventListener("click", () => setAdminMenu(false));
+    }
+
+    document.addEventListener("pointerdown", (event) => {
+      if (!isMobileAdminMenu() || !isAdminMenuOpen()) return;
+      const sidebar = $("#adminSidebar");
+      const toggle = $("#adminMenuToggle");
+      if (sidebar && sidebar.contains(event.target)) return;
+      if (toggle && toggle.contains(event.target)) return;
+      setAdminMenu(false);
+    });
+
+    window.addEventListener("resize", () => {
+      if (!isMobileAdminMenu()) setAdminMenu(false);
     });
 
     $("#adminLogout").addEventListener("click", () => {
       window.localStorage.removeItem(ADMIN_SESSION_KEY);
       currentAdmin = null;
+      setAdminMenu(false);
       showOnly("#adminLogin");
       bindLogin();
     });
@@ -405,7 +458,10 @@
       if (event.target.id === "adminModal") closeModal();
     });
     document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") closeModal();
+      if (event.key === "Escape") {
+        closeModal();
+        setAdminMenu(false);
+      }
     });
   }
 
