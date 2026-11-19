@@ -168,6 +168,7 @@ textarea { resize: vertical; line-height: 1.5; }
 .admin-app { display: grid; grid-template-columns: 230px minmax(0, 1fr); min-height: 100vh; }
 
 .admin-menu-toggle { display: none; }
+.admin-menu-close { display: none; }
 .admin-menu-backdrop { display: none; }
 
 .admin-sidebar {
@@ -344,40 +345,51 @@ td.num { white-space: nowrap; font-variant-numeric: tabular-nums; }
 
 @media (max-width: 620px) {
   .auth-card { padding: 22px; }
-  .admin-app { grid-template-columns: 72px minmax(0, 1fr); }
-  .admin-sidebar { align-items: center; padding: 14px 8px; z-index: 43; }
-  .admin-brand { justify-content: center; padding: 0 0 14px; }
-  .admin-brand span,
-  .admin-nav-item span,
-  .admin-theme-label,
-  .admin-theme-button span,
-  .admin-logout span { display: none; }
+  .admin-app { grid-template-columns: minmax(0, 1fr); height: 100vh; height: 100dvh; min-height: 0; overflow: hidden; }
+  .admin-sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 43;
+    width: min(260px, 84vw);
+    height: 100vh;
+    height: 100dvh;
+    padding: 18px 14px;
+    align-items: stretch;
+    overflow-y: auto;
+    box-shadow: 12px 0 32px -18px rgba(3, 20, 14, .7);
+    transform: translateX(-105%);
+    visibility: hidden;
+    pointer-events: none;
+    transition: transform .22s ease, visibility .22s ease;
+  }
+  .admin-app.is-menu-open .admin-sidebar { transform: translateX(0); visibility: visible; pointer-events: auto; }
+  .admin-sidebar .icon { display: none; }
+  .admin-menu-close { display: grid; place-items: center; align-self: flex-end; width: 32px; height: 32px; margin: 0 0 8px auto; padding: 0; border: 1px solid var(--border); border-radius: 9px; background: var(--soft); color: var(--text-2); font-size: 20px; line-height: 1; }
+  .admin-brand { justify-content: flex-start; padding: 0 8px 22px; }
   .admin-nav { width: 100%; }
   .admin-nav-item,
   .admin-theme-button,
-  .admin-logout { justify-content: center; padding: 0; }
-  .admin-theme { width: 100%; padding: 10px 0 0; }
-  .admin-theme-button { min-height: 34px; }
+  .admin-logout { justify-content: flex-start; padding: 0 12px; }
+  .admin-theme { width: 100%; padding: 12px 8px 4px; }
+  .admin-theme-button { min-height: 36px; }
   .admin-menu-toggle { display: grid; place-items: center; flex: 0 0 38px; width: 38px; height: 38px; min-height: 0; padding: 0; border: 1px solid var(--border); border-radius: 11px; background: var(--soft); color: var(--text); }
   .admin-menu-toggle .icon { width: 18px; height: 18px; }
-  .admin-topbar { position: relative; z-index: 42; gap: 10px; padding: 0 12px; }
+  .admin-body { display: flex; flex-direction: column; height: 100vh; height: 100dvh; min-height: 0; overflow: hidden; }
+  .admin-topbar { position: relative; z-index: 42; flex: 0 0 auto; gap: 10px; padding: 0 12px; }
   .admin-topbar h1 { flex: 1; min-width: 0; font-size: 16px; }
   .top-link { font-size: 11px; white-space: nowrap; }
+  .admin-main { flex: 1; min-height: 0; overflow: hidden; padding: 14px 12px 18px; }
+  .admin-section.is-active { display: flex; flex-direction: column; gap: 14px; height: 100%; min-height: 0; }
   .admin-menu-backdrop:not([hidden]) { display: block; position: fixed; inset: 0; z-index: 41; background: rgba(5, 20, 15, .42); }
-  .admin-app.is-menu-open { grid-template-columns: 230px minmax(0, 1fr); }
-  .admin-app.is-menu-open .admin-sidebar { align-items: stretch; padding: 14px 10px; box-shadow: 12px 0 32px -18px rgba(3, 20, 14, .7); }
-  .admin-app.is-menu-open .admin-brand { justify-content: flex-start; padding: 0 8px 22px; }
-  .admin-app.is-menu-open .admin-brand span { display: grid; }
-  .admin-app.is-menu-open .admin-nav-item span,
-  .admin-app.is-menu-open .admin-theme-label,
-  .admin-app.is-menu-open .admin-theme-button span,
-  .admin-app.is-menu-open .admin-logout span { display: inline; }
-  .admin-app.is-menu-open .admin-nav-item,
-  .admin-app.is-menu-open .admin-theme-button,
-  .admin-app.is-menu-open .admin-logout { justify-content: flex-start; padding: 0 12px; }
-  .admin-app.is-menu-open .admin-theme { padding: 12px 8px 4px; }
-  .admin-app.is-menu-open .admin-theme-button { min-height: 36px; }
+  .panel { padding: 14px; }
+  .panel-head { align-items: flex-start; flex-direction: column; margin-bottom: 12px; }
+  .panel-fixed { flex: 0 0 auto; }
+  .panel-scroll { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow: hidden; }
+  .panel-scroll > .panel-head { flex: 0 0 auto; }
+  .panel-scroll > .table-wrap,
+  .panel-scroll > .log-list { flex: 1; min-height: 0; overflow: auto; }
+  .panel-scroll th { position: sticky; top: 0; z-index: 1; background: var(--surface); }
+  .admin-scroll-stack { display: grid; flex: 1; min-height: 0; overflow-y: auto; align-content: start; gap: 14px; padding-right: 2px; }
   .admin-form, .inline-form, .detail-grid { grid-template-columns: 1fr; }
-  .panel-head { align-items: flex-start; flex-direction: column; }
   .search { max-width: 100%; }
 }

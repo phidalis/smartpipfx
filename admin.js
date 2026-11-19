@@ -415,6 +415,11 @@
       menuToggle.addEventListener("click", () => setAdminMenu(!isAdminMenuOpen()));
     }
 
+    const menuClose = $("#adminMenuClose");
+    if (menuClose) {
+      menuClose.addEventListener("click", () => setAdminMenu(false));
+    }
+
     const menuBackdrop = $("#adminMenuBackdrop");
     if (menuBackdrop) {
       menuBackdrop.addEventListener("click", () => setAdminMenu(false));

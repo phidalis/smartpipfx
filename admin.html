@@ -56,6 +56,7 @@
 
   <div class="admin-app" id="adminApp" hidden>
     <aside class="admin-sidebar" id="adminSidebar">
+      <button type="button" class="admin-menu-close" id="adminMenuClose" aria-label="Close admin menu">&times;</button>
       <a class="admin-brand" href="dashboard.html">
         <img src="images/smart-pips-logo.svg" alt="">
         <span><strong>SMART PIPS</strong><small>Admin Console</small></span>
@@ -89,25 +90,27 @@
       </header>
       <main class="admin-main">
         <section class="admin-section is-active" data-section="overview">
-          <div class="stat-grid">
-            <article class="stat-card"><span>Total Users</span><strong id="statUsers">0</strong><small>Registered accounts</small></article>
-            <article class="stat-card"><span>Total Deposits</span><strong id="statDeposits">$0.00</strong><small>All completed deposits</small></article>
-            <article class="stat-card"><span>Total Withdrawals</span><strong id="statWithdrawals">$0.00</strong><small>Requested by users</small></article>
-            <article class="stat-card"><span>Total Invested</span><strong id="statInvested">$0.00</strong><small>Cumulative principal</small></article>
-            <article class="stat-card"><span>Active Investment</span><strong id="statActive">$0.00</strong><small>Currently running</small></article>
-            <article class="stat-card"><span>Actual Amount Due</span><strong id="statActual">$0.00</strong><small>Payout on active plans</small></article>
-            <article class="stat-card"><span>Pending Withdrawals</span><strong id="statPending">0</strong><small>Awaiting action</small></article>
-            <article class="stat-card"><span>Active Plans</span><strong id="statPlans">0</strong><small>Available to users</small></article>
-            <article class="stat-card"><span>Open Support</span><strong id="statSupport">0</strong><small>Messages awaiting reply</small></article>
-          </div>
-          <div class="panel">
-            <div class="panel-head"><h2>Recent admin activity</h2></div>
-            <div id="adminRecentLog" class="log-list"></div>
+          <div class="admin-scroll-stack">
+            <div class="stat-grid">
+              <article class="stat-card"><span>Total Users</span><strong id="statUsers">0</strong><small>Registered accounts</small></article>
+              <article class="stat-card"><span>Total Deposits</span><strong id="statDeposits">$0.00</strong><small>All completed deposits</small></article>
+              <article class="stat-card"><span>Total Withdrawals</span><strong id="statWithdrawals">$0.00</strong><small>Requested by users</small></article>
+              <article class="stat-card"><span>Total Invested</span><strong id="statInvested">$0.00</strong><small>Cumulative principal</small></article>
+              <article class="stat-card"><span>Active Investment</span><strong id="statActive">$0.00</strong><small>Currently running</small></article>
+              <article class="stat-card"><span>Actual Amount Due</span><strong id="statActual">$0.00</strong><small>Payout on active plans</small></article>
+              <article class="stat-card"><span>Pending Withdrawals</span><strong id="statPending">0</strong><small>Awaiting action</small></article>
+              <article class="stat-card"><span>Active Plans</span><strong id="statPlans">0</strong><small>Available to users</small></article>
+              <article class="stat-card"><span>Open Support</span><strong id="statSupport">0</strong><small>Messages awaiting reply</small></article>
+            </div>
+            <div class="panel">
+              <div class="panel-head"><h2>Recent admin activity</h2></div>
+              <div id="adminRecentLog" class="log-list"></div>
+            </div>
           </div>
         </section>
 
         <section class="admin-section" data-section="plans" hidden>
-          <div class="panel">
+          <div class="panel panel-fixed">
             <div class="panel-head"><h2 id="planFormTitle">Create investment plan</h2><button class="btn btn-ghost" type="button" id="planReset">Reset form</button></div>
             <form id="planForm" class="admin-form" novalidate>
               <label>Plan name<input id="planName" type="text" placeholder="e.g. Growth 30 Days" required></label>
@@ -119,21 +122,21 @@
               <button class="btn btn-primary" type="submit" id="planSubmit">Save Plan</button>
             </form>
           </div>
-          <div class="panel">
+          <div class="panel panel-scroll">
             <div class="panel-head"><h2>Configured plans</h2><span class="muted" id="planCount">0 plans</span></div>
             <div class="table-wrap"><table><thead><tr><th>Plan</th><th>Minimum</th><th>Period</th><th>Actual payout</th><th>Status</th><th>Actions</th></tr></thead><tbody id="planTable"></tbody></table></div>
           </div>
         </section>
 
         <section class="admin-section" data-section="users" hidden>
-          <div class="panel">
+          <div class="panel panel-scroll">
             <div class="panel-head"><h2>Registered users</h2><input id="userSearch" class="search" type="search" placeholder="Search name or email"></div>
             <div class="table-wrap"><table><thead><tr><th>User</th><th>Status</th><th>Balance</th><th>Invested</th><th>Active</th><th>Actual due</th><th>Actions</th></tr></thead><tbody id="userTable"></tbody></table></div>
           </div>
         </section>
 
         <section class="admin-section" data-section="deposits" hidden>
-          <div class="panel">
+          <div class="panel panel-fixed">
             <div class="panel-head"><h2>Add manual deposit</h2></div>
             <form id="manualDepositForm" class="admin-form inline-form" novalidate>
               <label>User<select id="depositUser"></select></label>
@@ -142,28 +145,28 @@
               <p class="form-error" id="manualDepositError" role="alert"></p>
             </form>
           </div>
-          <div class="panel">
+          <div class="panel panel-scroll">
             <div class="panel-head"><h2>Deposit records</h2></div>
             <div class="table-wrap"><table><thead><tr><th>User</th><th>Amount</th><th>Date</th><th>Status</th></tr></thead><tbody id="depositTable"></tbody></table></div>
           </div>
         </section>
 
         <section class="admin-section" data-section="withdrawals" hidden>
-          <div class="panel">
+          <div class="panel panel-scroll">
             <div class="panel-head"><h2>Withdrawal requests</h2><span class="muted" id="withdrawCount">0 requests</span></div>
             <div class="table-wrap"><table><thead><tr><th>User</th><th>Amount</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead><tbody id="withdrawTable"></tbody></table></div>
           </div>
         </section>
 
         <section class="admin-section" data-section="payouts" hidden>
-          <div class="panel">
+          <div class="panel panel-scroll">
             <div class="panel-head"><h2>Investments and payouts</h2><span class="muted" id="investmentCount">0 investments</span></div>
             <div class="table-wrap"><table><thead><tr><th>User</th><th>Plan</th><th>Principal</th><th>Actual amount</th><th>Maturity</th><th>Status</th><th>Action</th></tr></thead><tbody id="payoutTable"></tbody></table></div>
           </div>
         </section>
 
         <section class="admin-section" data-section="support" hidden>
-          <div class="panel">
+          <div class="panel panel-scroll">
             <div class="panel-head">
               <h2>Support inbox</h2>
               <select id="supportFilter" class="search" style="max-width:180px">
@@ -177,7 +180,7 @@
         </section>
 
         <section class="admin-section" data-section="settings" hidden>
-          <div class="panel">
+          <div class="panel panel-fixed">
             <div class="panel-head"><h2>Admin credentials</h2></div>
             <form id="adminSettingsForm" class="admin-form" novalidate>
               <label>Admin email<input id="settingsEmail" type="email" autocomplete="username" required></label>
@@ -187,7 +190,7 @@
               <button class="btn btn-primary" type="submit">Save Settings</button>
             </form>
           </div>
-          <div class="panel">
+          <div class="panel panel-scroll">
             <div class="panel-head"><h2>Activity log</h2><button class="btn btn-ghost" type="button" id="clearLog">Clear log</button></div>
             <div id="adminLog" class="log-list"></div>
           </div>
