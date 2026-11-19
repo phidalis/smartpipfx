@@ -39,6 +39,16 @@
     <symbol id="i-arrow-right" viewBox="0 0 24 24">
       <path d="M5 12h14M13 6l6 6-6 6"/>
     </symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24">
+      <path d="M4.2 11a8 8 0 0 1 13.7-5.1L20 8"/>
+      <path d="M20 4v4h-4"/>
+      <path d="M19.8 13a8 8 0 0 1-13.7 5.1L4 16"/>
+      <path d="M4 20v-4h4"/>
+    </symbol>
+    <symbol id="i-lightbulb" viewBox="0 0 24 24">
+      <path d="M9 18h6m-5 3h4"/>
+      <path d="M8.4 14.5A6 6 0 1 1 15.6 14.5c-.9.8-1.4 1.6-1.6 2.5h-4.2c-.2-.9-.7-1.7-1.4-2.5Z"/>
+    </symbol>
     <symbol id="i-chevron-left" viewBox="0 0 24 24">
       <path d="m15 5-7 7 7 7"/>
     </symbol>
@@ -197,87 +207,109 @@
 
     <main class="app-main" id="mainContent" tabindex="-1">
       <section class="page home-page is-active" id="page-home" data-page="home">
-        <article class="welcome-card reveal">
-          <div class="welcome-copy">
-            <p class="welcome-hello">Welcome Back,</p>
-            <h1 class="welcome-name" data-bind="welcomeName"></h1>
-            <p class="welcome-tagline">Invest Smart. Grow Together.</p>
-          </div>
-        </article>
-
-        <div class="metric-grid reveal" style="--delay:.08s">
-          <article class="metric-card">
-            <span class="metric-label">Invested Amount</span>
-            <strong data-bind="invested"></strong>
-            <span class="metric-note">Total principal added</span>
-          </article>
-          <article class="metric-card">
-            <span class="metric-label">Active Investment</span>
-            <strong data-bind="activeInvestment"></strong>
-            <span class="metric-status"><i aria-hidden="true"></i> Running on Profits</span>
-          </article>
-          <article class="metric-card">
-            <span class="metric-label">Actual Amount</span>
-            <strong data-bind="actualAmount"></strong>
-            <span class="metric-note">Profit: <span data-bind="profitAmount"></span></span>
-          </article>
-        </div>
-
-        <div class="action-grid reveal" style="--delay:.12s">
-          <button class="action-btn action-invest" type="button" data-route="invest">
-            <svg class="icon"><use href="#i-trend"></use></svg>
-            <span>Invest Now</span>
-          </button>
-          <button class="action-btn action-withdraw" type="button" data-route="withdraw">
-            <svg class="icon"><use href="#i-wallet"></use></svg>
-            <span>Withdraw</span>
-          </button>
-          <button class="action-btn action-deposit" type="button" data-route="deposit">
-            <svg class="icon"><use href="#i-deposit"></use></svg>
-            <span>Deposit (Demo)</span>
-          </button>
-        </div>
-
-        <article class="overview-card reveal" id="overviewCard" style="--delay:.18s">
-          <div class="overview-head">
-            <span class="section-icon"><svg class="icon"><use href="#i-chart-bar"></use></svg></span>
-            <h2>Investment Overview</h2>
-            <button class="text-link" type="button" data-route="invest">View All <svg class="icon"><use href="#i-arrow-right"></use></svg></button>
-          </div>
-          <div class="overview-stats">
-            <div>
-              <strong class="overview-amount" data-bind="invested"></strong>
-              <p class="card-label">Total Invested</p>
-              <p class="overview-sub">Actual amount: <span data-bind="actualAmount"></span></p>
+        <div class="summary-grid reveal" style="--delay:.06s">
+          <article class="summary-card summary-total">
+            <div class="summary-top">
+              <span class="summary-icon"><svg class="icon"><use href="#i-wallet"></use></svg></span>
+              <button class="summary-arrow" type="button" data-route="invest" aria-label="Open investment plans"><svg class="icon"><use href="#i-arrow-right"></use></svg></button>
             </div>
-            <span class="growth-pill growth-pill-soft" data-bind="investGrowth"></span>
+            <span class="summary-label">Total Invested</span>
+            <strong class="summary-value" data-bind="invested"></strong>
+            <span class="summary-note">Lifetime Investment</span>
+          </article>
+
+          <article class="summary-card summary-active">
+            <div class="summary-top">
+              <span class="summary-icon"><svg class="icon"><use href="#i-trend"></use></svg></span>
+              <span class="summary-chip"><i class="status-dot"></i> Currently Earning</span>
+            </div>
+            <span class="summary-label">Active Investment</span>
+            <strong class="summary-value" data-bind="activeInvestment"></strong>
+            <span class="summary-note">Money working for you</span>
+          </article>
+
+          <article class="summary-card summary-return">
+            <div class="summary-top">
+              <span class="summary-icon"><svg class="icon"><use href="#i-arrow-up-right"></use></svg></span>
+              <span class="return-badge" data-bind="liveTargetGrowth">+0.00%</span>
+            </div>
+            <span class="summary-label">Total Estimated Return</span>
+            <strong class="summary-value" data-bind="actualAmount"></strong>
+            <span class="summary-note">Target for active period</span>
+          </article>
+        </div>
+
+        <article class="growth-card reveal" id="growthCard" style="--delay:.12s">
+          <header class="growth-header">
+            <div>
+              <span class="live-indicator"><i></i> Live</span>
+              <h2>Live Growth</h2>
+            </div>
+            <div class="growth-meta">
+              <span id="growthUpdated">Updated just now</span>
+              <button class="growth-refresh" id="growthRefresh" type="button" aria-label="Refresh growth data"><svg class="icon"><use href="#i-refresh"></use></svg></button>
+            </div>
+          </header>
+
+          <div class="growth-hero">
+            <p class="growth-kicker">Your Investment is Growing!</p>
+            <strong class="growth-value" id="currentValue">$0.00</strong>
+            <div class="growth-deltas">
+              <span class="delta-profit" id="profitEarned">+$0.00</span>
+              <span class="delta-percent" id="liveGrowthPct">+0.00%</span>
+            </div>
           </div>
-          <div class="chart-wrap" id="chartWrap">
-            <svg class="investment-chart" id="investmentChart" viewBox="0 0 320 150" preserveAspectRatio="none" aria-label="Investment growth chart" role="img">
+
+          <div class="growth-chart-wrap" id="chartWrap">
+            <svg class="growth-chart" id="investmentChart" viewBox="0 0 320 150" preserveAspectRatio="none" aria-label="Live investment growth chart" role="img">
               <defs>
                 <linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" stop-color="#00D99A" stop-opacity=".32"/>
-                  <stop offset=".55" stop-color="#00D99A" stop-opacity=".1"/>
-                  <stop offset="1" stop-color="#00D99A" stop-opacity="0"/>
+                  <stop offset="0%" stop-color="#16A879" stop-opacity=".34"></stop>
+                  <stop offset="100%" stop-color="#16A879" stop-opacity="0"></stop>
                 </linearGradient>
                 <linearGradient id="chartStroke" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0" stop-color="#00B982"/>
-                  <stop offset="1" stop-color="#00D99A"/>
+                  <stop offset="0%" stop-color="#0B8F66"></stop>
+                  <stop offset="100%" stop-color="#1FDDA4"></stop>
                 </linearGradient>
               </defs>
               <g id="chartGrid" class="chart-grid"></g>
               <path class="chart-area" id="chartArea" fill="url(#chartFill)"></path>
               <path class="chart-line" id="chartLine" fill="none" stroke="url(#chartStroke)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
-              <line id="chartCrosshair" class="chart-crosshair"></line>
+              <circle class="chart-endpoint" id="chartEndpoint" cx="0" cy="0" r="7"></circle>
               <g id="chartPoints"></g>
+              <line id="chartCrosshair" class="chart-crosshair"></line>
             </svg>
+            <span class="chart-endpoint-label" id="chartEndpointLabel">$0.00</span>
             <div class="chart-tooltip" id="chartTooltip" role="status" hidden>
               <strong id="tooltipValue"></strong>
               <span id="tooltipDate"></span>
             </div>
-            <p class="chart-empty" id="chartEmpty" hidden>No investments yet. Your actual amount will appear here once a plan is active.</p>
+            <p class="chart-empty" id="chartEmpty" hidden>No active investment yet. Start a plan to see live growth.</p>
+          </div>
+
+          <div class="growth-info">
+            <span class="info-icon"><svg class="icon"><use href="#i-lightbulb"></use></svg></span>
+            <p id="growthMessage">No active investment right now. Invest in a plan to start growing.</p>
           </div>
         </article>
+
+        <div class="action-grid growth-actions reveal" style="--delay:.18s">
+          <button class="action-btn action-invest" type="button" data-route="invest">
+            <span class="action-icon"><svg class="icon"><use href="#i-trend"></use></svg></span>
+            <span class="action-copy"><strong>Invest Now</strong><small>Choose a plan and start earning.</small></span>
+            <svg class="icon action-arrow"><use href="#i-arrow-right"></use></svg>
+          </button>
+          <button class="action-btn action-withdraw" type="button" data-route="withdraw">
+            <span class="action-icon"><svg class="icon"><use href="#i-wallet"></use></svg></span>
+            <span class="action-copy"><strong>Withdraw</strong><small>Move funds when you need them.</small></span>
+            <svg class="icon action-arrow"><use href="#i-arrow-right"></use></svg>
+          </button>
+          <button class="action-btn action-deposit" type="button" data-route="deposit">
+            <span class="action-icon"><svg class="icon"><use href="#i-deposit"></use></svg></span>
+            <span class="action-copy"><strong>Deposit</strong><small>Add money to your wallet.</small></span>
+            <svg class="icon action-arrow"><use href="#i-arrow-right"></use></svg>
+          </button>
+        </div>
 
         <section class="transactions-section reveal" style="--delay:.24s">
           <div class="section-head">

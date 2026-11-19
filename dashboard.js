@@ -152,7 +152,9 @@
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
   const formatMoney = (value) => currencyFormatter.format(value);
+  const formatSignedMoney = (value) => `${value > 0 ? "+" : ""}${formatMoney(value)}`;
   const formatGrowth = (value) => `${value > 0 ? "+" : ""}${value.toFixed(1)}%`;
+  const formatGrowthPrecise = (value) => `${value > 0 ? "+" : ""}${Number(value || 0).toFixed(2)}%`;
   const roundMoney = (value) => Math.round(value * 100) / 100;
   const formatAxis = (value) => {
     const absolute = Math.abs(value);
@@ -192,35 +194,133 @@
     return appData.investment.investments.filter((item) => item.status === "active");
   }
 
-  function investmentStats() {
+  const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+  function getInvestmentTiming(investment, now) {
+    const start = new Date(investment.startDate).getTime();
+    const end = new Date(investment.maturityDate).getTime();
+    if (!Number.isFinite(start) || !Number.isFinite(end) || end <= start) {
+      return {
+        start: Number.isFinite(start) ? start : now,
+        end: Number.isFinite(end) ? end : now,
+        progress: investment.status === "completed" ? 1 : 0
+      };
+    }
+    return { start, end, progress: clamp((now - start) / (end - start), 0, 1) };
+  }
+
+  function investmentSeed(investment) {
+    const key = `${investment.id || ""}|${investment.planName || ""}|${Number(investment.principal) || 0}|${Number(investment.payoutAmount) || 0}|${investment.startDate || ""}`;
+    let hash = 0;
+    for (let index = 0; index < key.length; index += 1) {
+      hash = (hash * 31 + key.charCodeAt(index)) % 1000003;
+    }
+    return hash;
+  }
+
+  function investmentBaseValue(investment, now) {
+    const principal = Math.max(0, Number(investment.principal) || 0);
+    const payout = Math.max(principal, Number(investment.payoutAmount) || principal);
+    const timing = getInvestmentTiming(investment, now);
+    const progress = investment.status === "completed" ? 1 : timing.progress;
+    return roundMoney(clamp(principal + (payout - principal) * progress, principal, payout));
+  }
+
+  function investmentCurrentValue(investment, now) {
+    const principal = Math.max(0, Number(investment.principal) || 0);
+    const payout = Math.max(principal, Number(investment.payoutAmount) || principal);
+    const base = investmentBaseValue(investment, now);
+    const timing = getInvestmentTiming(investment, now);
+    const progress = investment.status === "completed" ? 1 : timing.progress;
+    if (progress <= 0 || progress >= 1) return base;
+
+    const expectedProfit = Math.max(0, payout - principal);
+    const amplitude = Math.min(expectedProfit * 0.05, principal * 0.0005);
+    if (amplitude <= 0) return base;
+
+    const seed = investmentSeed(investment);
+    const seconds = now / 1000;
+    const wave = Math.sin(seconds * 0.61 + seed) * 0.5
+      + Math.sin(seconds * 1.37 + seed * 0.37) * 0.32
+      + Math.sin(seconds * 2.93 + seed * 0.73) * 0.18;
+    const fluctuation = wave * amplitude * Math.sin(Math.PI * progress);
+    return roundMoney(clamp(base + fluctuation, principal, payout));
+  }
+
+  function investmentChartValue(investment, now) {
+    const principal = Math.max(0, Number(investment.principal) || 0);
+    const payout = Math.max(principal, Number(investment.payoutAmount) || principal);
+    const timing = getInvestmentTiming(investment, now);
+    const progress = investment.status === "completed" ? 1 : timing.progress;
+    const base = principal + (payout - principal) * progress;
+    if (progress <= 0 || progress >= 1) return roundMoney(clamp(base, principal, payout));
+
+    const expectedProfit = Math.max(0, payout - principal);
+    const amplitude = Math.min(expectedProfit * 0.3, principal * 0.004);
+    if (amplitude <= 0) return roundMoney(clamp(base, principal, payout));
+
+    const seed = investmentSeed(investment);
+    const wave = Math.sin(progress * Math.PI * 10 + seed) * 0.45
+      + Math.sin(progress * Math.PI * 19 + seed * 0.37) * 0.35
+      + Math.sin(progress * Math.PI * 33 + seed * 0.73) * 0.2;
+    const seconds = now / 1000;
+    const liveWave = Math.sin(seconds * 0.83 + seed) * 0.6
+      + Math.sin(seconds * 1.71 + seed * 0.29) * 0.4;
+    const fluctuation = (wave * 0.65 + liveWave * 0.35) * amplitude * Math.sin(Math.PI * progress);
+    return roundMoney(clamp(base + fluctuation, principal, payout));
+  }
+
+  function investmentStats(now = Date.now()) {
     const active = getActiveInvestments();
-    const activePrincipal = active.reduce((sum, item) => sum + (Number(item.principal) || 0), 0);
-    const actualAmount = active.reduce((sum, item) => sum + (Number(item.payoutAmount) || 0), 0);
+    const activePrincipal = roundMoney(active.reduce((sum, item) => sum + (Number(item.principal) || 0), 0));
+    const targetAmount = roundMoney(active.reduce((sum, item) => sum + (Number(item.payoutAmount) || 0), 0));
+    const currentAmount = roundMoney(active.reduce((sum, item) => sum + investmentCurrentValue(item, now), 0));
+    const targetProfit = Math.max(0, roundMoney(targetAmount - activePrincipal));
+    const earnedProfit = roundMoney(clamp(currentAmount - activePrincipal, 0, targetProfit));
+    const growth = activePrincipal > 0 ? roundMoney((earnedProfit / activePrincipal) * 100) : 0;
+    const targetGrowth = activePrincipal > 0 ? roundMoney((targetProfit / activePrincipal) * 100) : 0;
+    const progress = targetProfit > 0 ? clamp(earnedProfit / targetProfit, 0, 1) : (active.length ? 1 : 0);
+
     return {
-      invested: appData.investment.total,
+      invested: roundMoney(appData.investment.total),
       active: activePrincipal,
-      actual: actualAmount,
-      profit: Math.max(0, roundMoney(actualAmount - activePrincipal)),
-      growth: activePrincipal > 0 ? roundMoney(((actualAmount - activePrincipal) / activePrincipal) * 100) : 0
+      actual: targetAmount,
+      current: currentAmount,
+      profit: earnedProfit,
+      targetProfit,
+      growth,
+      targetGrowth,
+      progress,
+      activeCount: active.length
     };
   }
 
-  function buildChartData() {
-    const records = [...appData.investment.investments]
-      .filter((item) => item.startDate)
-      .sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+  function buildChartData(now = Date.now()) {
+    const active = getActiveInvestments();
+    if (!active.length) return [];
 
-    let runningActual = 0;
-    return records.map((item) => {
-      runningActual += Number(item.payoutAmount) || 0;
-      const date = new Date(item.startDate);
+    const timings = active.map((item) => getInvestmentTiming(item, now));
+    const start = Math.min(...timings.map((item) => item.start));
+    const end = Math.max(...timings.map((item) => item.end));
+    const from = Number.isFinite(start) ? Math.min(start, now) : now;
+    const to = Number.isFinite(end) && end > from ? Math.max(now, from + 1) : from + 1;
+    const sampleCount = 28;
+    const displayValue = investmentStats(now).current;
+
+    return Array.from({ length: sampleCount }, (_, index) => {
+      const at = from + ((to - from) * index) / (sampleCount - 1);
+      const date = new Date(at);
+      const position = index / (sampleCount - 1);
+      const chartValue = roundMoney(active.reduce((sum, item) => sum + investmentChartValue(item, at), 0));
+      const endBlend = clamp((position - 0.82) / 0.18, 0, 1);
+      const value = roundMoney(chartValue + (displayValue - chartValue) * endBlend);
       return {
-        value: roundMoney(runningActual),
+        value,
         date: Number.isNaN(date.getTime())
           ? "Investment"
-          : date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+          : date.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })
       };
-    }).slice(-12);
+    });
   }
 
   function settleMaturedInvestments() {
@@ -249,12 +349,14 @@
     });
 
     if (changed) saveData();
+    return changed;
   }
 
   const chartState = {
     coords: [],
     animated: false,
     allZero: false,
+    width: 320,
     paddingTop: 26,
     paddingBottom: 16,
     height: 150
@@ -273,7 +375,8 @@
       activeInvestment: formatMoney(stats.active),
       profitAmount: formatMoney(stats.profit),
       actualAmount: formatMoney(stats.actual),
-      investGrowth: formatGrowth(stats.growth)
+      investGrowth: formatGrowth(stats.growth),
+      liveTargetGrowth: formatGrowthPrecise(stats.targetGrowth)
     };
 
     Object.entries(values).forEach(([key, value]) => {
@@ -285,6 +388,92 @@
     $$("[data-max-balance]").forEach((element) => {
       element.max = appData.wallet.balance.toFixed(2);
     });
+  }
+
+  function setAnimatedValue(element, value, formatter) {
+    if (!element) return;
+    const next = Number(value) || 0;
+    const previous = element.dataset.value === undefined ? next : Number(element.dataset.value) || 0;
+    element.dataset.value = String(next);
+    if (element.growthFrame) window.cancelAnimationFrame(element.growthFrame);
+
+    if (previous === next || typeof window.performance === "undefined") {
+      element.textContent = formatter(next);
+      return;
+    }
+
+    const started = window.performance.now();
+    const duration = 420;
+    const tick = (time) => {
+      const ratio = clamp((time - started) / duration, 0, 1);
+      const eased = 1 - Math.pow(1 - ratio, 3);
+      element.textContent = formatter(previous + (next - previous) * eased);
+      element.growthFrame = ratio < 1 ? window.requestAnimationFrame(tick) : null;
+    };
+    element.growthFrame = window.requestAnimationFrame(tick);
+  }
+
+  function updateLiveGrowth(now = Date.now()) {
+    const stats = investmentStats(now);
+    renderBindings();
+
+    setAnimatedValue($("#currentValue"), stats.current, formatMoney);
+    setAnimatedValue($("#profitEarned"), stats.profit, formatSignedMoney);
+
+    const percent = $("#liveGrowthPct");
+    if (percent) percent.textContent = formatGrowthPrecise(stats.growth);
+
+    const updated = $("#growthUpdated");
+    if (updated) {
+      updated.textContent = `Updated ${new Date(now).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", second: "2-digit" })}`;
+    }
+
+    const message = $("#growthMessage");
+    if (message) {
+      message.textContent = stats.activeCount
+        ? `Your active investment of ${formatMoney(stats.active)} is growing.`
+        : "No active investment right now. Invest in a plan to start growing.";
+    }
+
+    const endpointLabel = $("#chartEndpointLabel");
+    if (!stats.activeCount && endpointLabel) endpointLabel.hidden = true;
+    renderChart(now);
+  }
+
+  function setupLiveGrowth() {
+    updateLiveGrowth();
+
+    const refresh = $("#growthRefresh");
+    if (refresh) {
+      refresh.addEventListener("click", () => {
+        const changed = settleMaturedInvestments();
+        if (changed) {
+          renderActiveInvestments();
+          renderTransactions();
+          renderNotifications();
+        }
+        updateLiveGrowth();
+        showToast("Investment growth refreshed.");
+      });
+    }
+
+    let lastSettlement = Date.now();
+    window.setInterval(() => {
+      const home = $("#page-home");
+      if (!home || home.hidden) return;
+
+      const now = Date.now();
+      if (now - lastSettlement >= 15000) {
+        const changed = settleMaturedInvestments();
+        lastSettlement = now;
+        if (changed) {
+          renderActiveInvestments();
+          renderTransactions();
+          renderNotifications();
+        }
+      }
+      updateLiveGrowth(now);
+    }, 1000);
   }
 
   function renderPlanOptions() {
@@ -607,11 +796,10 @@
           description: `${formatMoney(amount)} is active. Your actual amount will be ${formatMoney(payout)} after ${periodDays} day${periodDays === 1 ? "" : "s"}.`
         });
         saveData();
-        renderBindings();
+        updateLiveGrowth(now);
         renderActiveInvestments();
         renderTransactions();
         renderNotifications();
-        renderChart();
         input.value = "";
         showToast(`${formatMoney(amount)} invested. Actual amount: ${formatMoney(payout)}.`);
       });
@@ -966,7 +1154,7 @@
       window.cancelAnimationFrame(resizeFrame);
       resizeFrame = window.requestAnimationFrame(() => {
         const home = $("#page-home");
-        if (home && !home.hidden) renderChart();
+        if (home && !home.hidden) updateLiveGrowth();
       });
     };
     window.addEventListener("resize", onResize);
@@ -995,8 +1183,8 @@
     return path;
   }
 
-  function renderChart() {
-    const data = buildChartData();
+  function renderChart(now = Date.now(), motion = false) {
+    const data = buildChartData(now);
     const line = $("#chartLine");
     const area = $("#chartArea");
     const pointsGroup = $("#chartPoints");
@@ -1011,6 +1199,10 @@
       chartState.allZero = true;
       const grid = $("#chartGrid");
       if (grid) grid.innerHTML = "";
+      const endpoint = $("#chartEndpoint");
+      if (endpoint) endpoint.style.display = "none";
+      const endpointLabel = $("#chartEndpointLabel");
+      if (endpointLabel) endpointLabel.hidden = true;
       if (empty) empty.hidden = false;
       hideTooltip();
       return;
@@ -1020,17 +1212,18 @@
 
     const wrap = $("#chartWrap");
     const svg = $("#investmentChart");
-    const box = wrap ? wrap.getBoundingClientRect() : null;
-    const width = box && box.width > 0 ? Math.round(box.width) : 320;
-    const height = box && box.height > 0 ? Math.round(box.height) : 150;
+    const box = motion ? null : (wrap ? wrap.getBoundingClientRect() : null);
+    const width = motion ? chartState.width : (box && box.width > 0 ? Math.round(box.width) : 320);
+    const height = motion ? chartState.height : (box && box.height > 0 ? Math.round(box.height) : 150);
     const paddingX = 18;
     const paddingTop = 26;
     const paddingBottom = 16;
+    chartState.width = width;
     chartState.paddingTop = paddingTop;
     chartState.paddingBottom = paddingBottom;
     chartState.height = height;
-    if (svg) svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
-    hideTooltip();
+    if (!motion && svg) svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+    if (!motion) hideTooltip();
 
     const values = data.map((item) => item.value);
     chartState.allZero = values.every((value) => value === 0);
@@ -1041,16 +1234,13 @@
     const max = chartState.allZero ? 1 : high + (spread || Math.abs(high) || 100) * 0.15;
 
     const grid = $("#chartGrid");
-    if (grid) {
+    if (!motion && grid) {
       const gridTop = paddingTop;
       const gridBottom = height - paddingBottom;
-      grid.innerHTML = chartState.allZero
-        ? `<line class="chart-grid-line" x1="${paddingX}" y1="${gridBottom}" x2="${width - 6}" y2="${gridBottom}"></line><text class="chart-grid-label" x="${width - 6}" y="${gridBottom - 6}" text-anchor="end">$0</text>`
-        : [0, .25, .5, .75, 1].map((ratio) => {
-          const y = gridTop + ratio * (gridBottom - gridTop);
-          const value = max - ratio * (max - min);
-          return `<line class="chart-grid-line" x1="${paddingX}" y1="${y.toFixed(2)}" x2="${width - 6}" y2="${y.toFixed(2)}"></line><text class="chart-grid-label" x="${width - 6}" y="${(y - 5).toFixed(2)}" text-anchor="end">${formatAxis(value)}</text>`;
-        }).join("");
+      grid.innerHTML = [0, .5, 1].map((ratio) => {
+        const y = gridTop + ratio * (gridBottom - gridTop);
+        return `<line class="chart-grid-line" x1="${paddingX}" y1="${y.toFixed(2)}" x2="${width - 6}" y2="${y.toFixed(2)}"></line>`;
+      }).join("");
     }
 
     const stepX = data.length > 1 ? (width - paddingX * 2) / (data.length - 1) : 0;
@@ -1070,21 +1260,38 @@
     area.setAttribute("d", chartState.allZero ? "" : `${linePath} L ${last.x.toFixed(2)} ${height} L ${first.x.toFixed(2)} ${height} Z`);
 
     const pointsEl = $("#chartPoints");
-    if (chartState.animated) {
-      line.style.strokeDasharray = "none";
-      line.style.strokeDashoffset = "0";
-      area.classList.toggle("is-visible", !chartState.allZero);
-      if (pointsEl) pointsEl.classList.add("is-static");
-    } else {
-      const length = line.getTotalLength();
-      line.style.strokeDasharray = String(length);
-      line.style.strokeDashoffset = String(length);
+    if (!motion) {
+      if (chartState.animated) {
+        line.style.strokeDasharray = "none";
+        line.style.strokeDashoffset = "0";
+        area.classList.toggle("is-visible", !chartState.allZero);
+        if (pointsEl) pointsEl.classList.add("is-static");
+      } else {
+        const length = line.getTotalLength();
+        line.style.strokeDasharray = String(length);
+        line.style.strokeDashoffset = String(length);
+      }
+
+      pointsGroup.innerHTML = `<g class="chart-point is-endpoint" data-index="${coords.length - 1}" tabindex="0" role="button" aria-label="${escapeHtml(formatMoney(last.value))} on ${escapeHtml(last.date)}" style="--point-delay:.35s">
+        <circle class="point-halo" cx="${last.x.toFixed(2)}" cy="${last.y.toFixed(2)}" r="9"></circle>
+        <circle class="point-core" cx="${last.x.toFixed(2)}" cy="${last.y.toFixed(2)}" r="4"></circle>
+      </g>`;
     }
 
-    pointsGroup.innerHTML = coords.map((point, index) => `<g class="chart-point" data-index="${index}" tabindex="0" role="button" aria-label="${escapeHtml(formatMoney(point.value))} on ${escapeHtml(point.date)}" style="--point-delay:${(0.35 + index * 0.08).toFixed(2)}s">
-      <circle class="point-halo" cx="${point.x.toFixed(2)}" cy="${point.y.toFixed(2)}" r="9"></circle>
-      <circle class="point-core" cx="${point.x.toFixed(2)}" cy="${point.y.toFixed(2)}" r="4"></circle>
-    </g>`).join("");
+    const endpoint = $("#chartEndpoint");
+    if (endpoint) {
+      endpoint.style.display = "";
+      endpoint.setAttribute("cx", last.x.toFixed(2));
+      endpoint.setAttribute("cy", last.y.toFixed(2));
+    }
+
+    const endpointLabel = $("#chartEndpointLabel");
+    if (endpointLabel) {
+      endpointLabel.hidden = false;
+      endpointLabel.textContent = formatMoney(last.value);
+      endpointLabel.style.left = `${clamp(last.x, 58, width - 58).toFixed(2)}px`;
+      endpointLabel.style.top = `${Math.max(20, last.y).toFixed(2)}px`;
+    }
   }
 
   function startChartAnimation() {
@@ -1104,8 +1311,23 @@
     });
   }
 
+  function startChartMotion() {
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let lastFrame = 0;
+    const frame = (time) => {
+      const home = $("#page-home");
+      if (home && !home.hidden && chartState.coords.length && time - lastFrame >= 32) {
+        lastFrame = time;
+        renderChart(Date.now(), true);
+      }
+      window.requestAnimationFrame(frame);
+    };
+    window.requestAnimationFrame(frame);
+  }
+
   function setupChartObserver() {
-    const card = $("#overviewCard");
+    const card = $("#growthCard");
     if (!card) return;
 
     if (!("IntersectionObserver" in window)) {
@@ -1263,11 +1485,19 @@
         renderSupportMessages();
         renderNotifications();
       }
+      if (event.key === stateKey) {
+        settleMaturedInvestments();
+        updateLiveGrowth();
+        renderActiveInvestments();
+        renderTransactions();
+        renderNotifications();
+      }
     });
     setupAccountSettings();
-    renderChart();
+    setupLiveGrowth();
     setupChartInteraction();
     setupChartObserver();
+    startChartMotion();
     navigate("home", true);
     requestAnimationFrame(moveIndicator);
   }
