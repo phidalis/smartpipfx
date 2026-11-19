@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#F3F6F5">
+  <link rel="icon" type="image/svg+xml" href="images/smart-pips-logo.svg">
+  <script>try{var t=localStorage.getItem("sp-theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <title>Smart Pip Investment | Invest Smart. Grow Together.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="site.css">
+</head>
+<body>
+  <svg class="svg-defs" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="i-spark" viewBox="0 0 24 24">
+      <path d="m12 2 1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9z"/>
+      <path d="M19 17h.01M5 18h.01"/>
+    </symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24">
+      <path d="M12 3 5 6v5.5c0 4.2 2.8 7.7 7 9.5 4.2-1.8 7-5.3 7-9.5V6z"/>
+      <path d="m9 12 2 2 4-4"/>
+    </symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24">
+      <path d="m3 17 6-6 4 4 8-8"/>
+      <path d="M15 7h6v6"/>
+    </symbol>
+    <symbol id="i-wallet" viewBox="0 0 24 24">
+      <path d="M4 8.5V7a2 2 0 0 1 2-2h11.5"/>
+      <rect x="4" y="8.5" width="16" height="10.5" rx="3"/>
+      <path d="M15 14h5"/>
+    </symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24">
+      <rect x="5" y="10" width="14" height="10" rx="2.5"/>
+      <path d="M8 10V7a4 4 0 0 1 8 0v3"/>
+    </symbol>
+    <symbol id="i-check" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8.5"/>
+      <path d="m8.5 12 2.5 2.5 4.5-5"/>
+    </symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24">
+      <path d="M5 12h14M13 6l6 6-6 6"/>
+    </symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="4"/>
+      <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
+    </symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24">
+      <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5Z"/>
+    </symbol>
+  </svg>
+
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Smart Pips Invest home">
+      <span class="brand-mark"><img class="brand-logo" src="images/smart-pips-logo.svg" alt=""></span>
+      <span class="brand-copy">
+        <span class="brand-name">SMART PIPS</span>
+        <span class="brand-sub">INVEST</span>
+      </span>
+    </a>
+    <div class="header-right">
+      <a class="header-link" href="#features">Features</a>
+      <a class="header-link" href="login.html">Log in</a>
+      <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch color mode">
+        <svg class="icon icon-sun"><use href="#i-sun"></use></svg>
+        <svg class="icon icon-moon"><use href="#i-moon"></use></svg>
+      </button>
+      <a class="btn btn-primary btn-small" href="signup.html">Sign Up Now</a>
+    </div>
+  </header>
+
+  <main class="site-main">
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow"><svg class="icon"><use href="#i-spark"></use></svg> Smart investing, made simple</span>
+        <h1>Welcome to <span>Smart Pip Investment.</span></h1>
+        <p class="hero-lead">Your money deserves a clear plan. Track your portfolio, follow your growth, and make confident moves from one simple dashboard built for everyday investors.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="signup.html">Sign Up Now <svg class="icon"><use href="#i-arrow"></use></svg></a>
+          <a class="btn btn-outline" href="login.html">Log In</a>
+        </div>
+        <p class="hero-note"><svg class="icon"><use href="#i-check"></use></svg> No card needed. Your account is stored right on this device.</p>
+      </div>
+
+      <div class="hero-visual" aria-label="Forex market chart preview">
+        <div class="forex-head">
+          <div class="forex-pair">
+            <span class="pair-flags" aria-hidden="true"><span class="pair-flag">EU</span><span class="pair-flag">US</span></span>
+            <span>
+              <span class="forex-pair-name">EUR / USD</span>
+              <span class="forex-pair-sub">Euro / US Dollar</span>
+            </span>
+          </div>
+          <span class="forex-badge">Forex</span>
+        </div>
+        <div class="forex-chart">
+          <img class="real-chart" src="images/forex-chart-real.png" alt="EUR/USD candlestick chart">
+          <div class="forex-axis" aria-hidden="true"><span>09:00</span><span>11:00</span><span>13:00</span><span>15:00</span><span>17:00</span></div>
+        </div>
+        <div class="forex-footer">
+          <div class="timeframe-group" aria-label="Chart timeframe">
+            <span class="timeframe is-active">1H</span>
+            <span class="timeframe">4H</span>
+            <span class="timeframe">1D</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats-strip" aria-label="Platform highlights">
+      <div class="stat"><strong>0%</strong><span>Starting portfolio growth</span></div>
+      <div class="stat"><strong>24/7</strong><span>Access to your dashboard</span></div>
+      <div class="stat"><strong>$0</strong><span>To create your account</span></div>
+    </section>
+
+    <section class="features" id="features">
+      <p class="section-label">Why Smart Pips</p>
+      <h2>Everything you need to stay on top of your money.</h2>
+      <p class="section-intro">A focused space for your investments, balance and activity. Sign up in seconds and your dashboard is ready when you are.</p>
+      <div class="feature-grid">
+        <article class="feature-card">
+          <span class="feature-icon"><svg class="icon"><use href="#i-chart"></use></svg></span>
+          <h3>A real dashboard</h3>
+          <p>See your wallet, invested amount, growth chart and recent transactions the moment you sign in.</p>
+        </article>
+        <article class="feature-card">
+          <span class="feature-icon"><svg class="icon"><use href="#i-check"></use></svg></span>
+          <h3>Simple onboarding</h3>
+          <p>Create an account with your name, email and password, then jump straight into your dashboard.</p>
+        </article>
+        <article class="feature-card">
+          <span class="feature-icon"><svg class="icon"><use href="#i-shield"></use></svg></span>
+          <h3>Stays on your device</h3>
+          <p>Accounts and sessions are saved in your browser's local storage, so you can return anytime on this device.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="cta-card">
+      <h2>Ready to invest smarter?</h2>
+      <p>Create your free account and open your Smart Pips dashboard in seconds.</p>
+      <a class="btn btn-primary" href="signup.html">Sign Up Now <svg class="icon"><use href="#i-arrow"></use></svg></a>
+    </section>
+  </main>
+
+  <footer class="site-footer">Smart Pips Invest · Accounts saved in local storage on this device</footer>
+  <script src="auth.js"></script>
+</body>
+</html>

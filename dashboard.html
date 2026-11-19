@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#F3F6F5">
+  <link rel="icon" type="image/svg+xml" href="images/smart-pips-logo.svg">
+  <script>try{var t=localStorage.getItem("sp-theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <script>try{if(!localStorage.getItem("sp-session"))location.replace("index.html")}catch(e){location.replace("index.html")}</script>
+  <title>Dashboard | Smart Pips Invest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <svg class="svg-defs" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="i-bell" viewBox="0 0 24 24">
+      <path d="M18 9a6 6 0 0 0-12 0c0 6.5-2.5 7.5-2.5 8.5h17C20.5 16.5 18 15.5 18 9Z"/>
+      <path d="M10 21a2.2 2.2 0 0 0 4 0"/>
+    </symbol>
+    <symbol id="i-user" viewBox="0 0 24 24">
+      <circle cx="12" cy="8" r="4"/>
+      <path d="M4.5 20a7.5 7.5 0 0 1 15 0"/>
+    </symbol>
+    <symbol id="i-wallet" viewBox="0 0 24 24">
+      <path d="M4 8.5V7a2 2 0 0 1 2-2h11.5"/>
+      <rect x="4" y="8.5" width="16" height="10.5" rx="3"/>
+      <path d="M15 14h5"/>
+      <circle cx="15" cy="14" r=".9" fill="currentColor" stroke="none"/>
+    </symbol>
+    <symbol id="i-trend" viewBox="0 0 24 24">
+      <path d="m3 17 6-6 4 4 8-8"/>
+      <path d="M15 7h6v6"/>
+    </symbol>
+    <symbol id="i-arrow-up-right" viewBox="0 0 24 24">
+      <path d="M7 17 17 7M9 7h8v8"/>
+    </symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24">
+      <path d="M5 12h14M13 6l6 6-6 6"/>
+    </symbol>
+    <symbol id="i-chevron-left" viewBox="0 0 24 24">
+      <path d="m15 5-7 7 7 7"/>
+    </symbol>
+    <symbol id="i-history" viewBox="0 0 24 24">
+      <path d="M3.2 12a8.8 8.8 0 1 0 2.7-6.4L3 8"/>
+      <path d="M3 4v4h4"/>
+      <path d="M12 7.5V12l3 2"/>
+    </symbol>
+    <symbol id="i-home" viewBox="0 0 24 24">
+      <path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1z"/>
+    </symbol>
+    <symbol id="i-chart-bar" viewBox="0 0 24 24">
+      <path d="M5 20v-8M12 20V4M19 20v-6"/>
+      <path d="M3 20h18"/>
+    </symbol>
+    <symbol id="i-support" viewBox="0 0 24 24">
+      <path d="M4 13a8 8 0 0 1 16 0"/>
+      <rect x="3" y="13" width="4" height="6" rx="1.5"/>
+      <rect x="17" y="13" width="4" height="6" rx="1.5"/>
+      <path d="M19 19c0 1.8-1.8 3-4 3h-2"/>
+    </symbol>
+    <symbol id="i-deposit" viewBox="0 0 24 24">
+      <path d="M12 4v11m0 0 4-4m-4 4-4-4"/>
+      <path d="M5 19h14"/>
+    </symbol>
+    <symbol id="i-profit" viewBox="0 0 24 24">
+      <path d="m4 16 5-5 3.5 3.5L20 7"/>
+      <path d="M15 7h5v5"/>
+    </symbol>
+    <symbol id="i-withdraw-small" viewBox="0 0 24 24">
+      <path d="M12 20V9m0 0 4 4m-4-4-4 4"/>
+      <path d="M5 5h14"/>
+    </symbol>
+    <symbol id="i-check-circle" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8.5"/>
+      <path d="m8.5 12 2.5 2.5 4.5-5"/>
+    </symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="3"/>
+      <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06-2 2-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.56V21h-2.8v-.09a1.7 1.7 0 0 0-1.1-1.56 1.7 1.7 0 0 0-1.87.34l-.06.06-2-2 .06-.06A1.7 1.7 0 0 0 6.02 15a1.7 1.7 0 0 0-1.56-1H4.4v-2.8h.09a1.7 1.7 0 0 0 1.56-1 1.7 1.7 0 0 0-.34-1.87l-.06-.06 2-2 .06.06a1.7 1.7 0 0 0 1.87.34H10a1.7 1.7 0 0 0 1-1.56V4.4h2.8v.09a1.7 1.7 0 0 0 1 1.56 1.7 1.7 0 0 0 1.87-.34l.06-.06 2 2-.06.06a1.7 1.7 0 0 0-.34 1.87V10a1.7 1.7 0 0 0 1.56 1h.11v2.8H21a1.7 1.7 0 0 0-1.6 1.2Z"/>
+    </symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24">
+      <path d="M12 3 5 6v5.5c0 4.2 2.8 7.7 7 9.5 4.2-1.8 7-5.3 7-9.5V6z"/>
+      <path d="m9 12 2 2 4-4"/>
+    </symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="4"/>
+      <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
+    </symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24">
+      <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5Z"/>
+    </symbol>
+    <symbol id="i-info" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8.5"/>
+      <path d="M12 11v5M12 8h.01"/>
+    </symbol>
+    <symbol id="i-logout" viewBox="0 0 24 24">
+      <path d="M10 5H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4"/>
+      <path d="M14 8l4 4-4 4M18 12H9"/>
+    </symbol>
+  </svg>
+
+  <div class="app-shell">
+    <aside class="desktop-sidebar" aria-label="Desktop navigation">
+      <a class="brand sidebar-brand" href="#home" data-route="home" aria-label="Smart Pips Invest home">
+        <span class="brand-mark"><img class="brand-logo" src="images/smart-pips-logo.svg" alt=""></span>
+        <span class="brand-copy">
+          <span class="brand-name">SMART PIPS</span>
+          <span class="brand-sub">INVEST</span>
+        </span>
+      </a>
+      <nav class="side-nav">
+        <button class="side-nav-item is-active" type="button" data-route="home" aria-current="page">
+          <svg class="icon"><use href="#i-home"></use></svg><span>Dashboard</span>
+        </button>
+        <button class="side-nav-item" type="button" data-route="deposit">
+          <svg class="icon"><use href="#i-deposit"></use></svg><span>Deposit</span>
+        </button>
+        <button class="side-nav-item" type="button" data-route="invest">
+          <svg class="icon"><use href="#i-chart-bar"></use></svg><span>Invest</span>
+        </button>
+        <button class="side-nav-item" type="button" data-route="withdraw">
+          <svg class="icon"><use href="#i-wallet"></use></svg><span>Withdraw</span>
+        </button>
+        <button class="side-nav-item" type="button" data-route="support">
+          <svg class="icon"><use href="#i-support"></use></svg><span>Support</span>
+        </button>
+      </nav>
+      <div class="sidebar-user">
+        <span class="sidebar-avatar" data-bind="profileInitial"></span>
+        <div>
+          <strong data-bind="profilePanelName"></strong>
+          <small>Investor account</small>
+        </div>
+      </div>
+      <button class="sidebar-logout" type="button" data-profile-action="Logout">
+        <svg class="icon"><use href="#i-logout"></use></svg><span>Logout</span>
+      </button>
+    </aside>
+
+    <header class="app-header">
+      <div class="desktop-page-title">
+        <h1 id="desktopPageTitle">Dashboard</h1>
+      </div>
+      <a class="brand" href="#home" data-route="home" aria-label="Smart Pips Invest home">
+        <span class="brand-mark"><img class="brand-logo" src="images/smart-pips-logo.svg" alt=""></span>
+        <span class="brand-copy">
+          <span class="brand-name">SMART PIPS</span>
+          <span class="brand-sub">INVEST</span>
+        </span>
+      </a>
+
+      <div class="header-actions">
+        <button class="icon-button" id="notificationToggle" type="button" aria-label="Notifications" aria-expanded="false" aria-controls="notificationPanel">
+          <svg class="icon"><use href="#i-bell"></use></svg>
+          <span class="notify-dot" id="notifyDot" aria-hidden="true"></span>
+        </button>
+        <button class="avatar-button" id="profileToggle" type="button" aria-label="Profile menu" aria-expanded="false" aria-controls="profilePanel">
+          <span data-bind="profileInitial"></span>
+        </button>
+      </div>
+
+      <section class="dropdown notification-panel" id="notificationPanel" role="dialog" aria-label="Notifications" hidden>
+        <div class="dropdown-head">
+          <strong>Notifications</strong>
+          <span id="notifyCount" data-bind="notifyCount"></span>
+        </div>
+        <div class="notification-list" id="notificationList"></div>
+      </section>
+
+      <section class="dropdown profile-panel" id="profilePanel" role="menu" aria-label="Profile menu" hidden>
+        <div class="profile-panel-head">
+          <span class="profile-panel-avatar" data-bind="profileInitial">P</span>
+          <div>
+            <strong data-bind="profilePanelName"></strong>
+            <small>Investor account</small>
+          </div>
+        </div>
+        <button class="menu-item" type="button" role="menuitem" data-profile-action="Profile Settings">
+          <svg class="icon"><use href="#i-settings"></use></svg><span>Profile Settings</span>
+        </button>
+        <button class="menu-item" type="button" role="menuitem" data-profile-action="Account Information">
+          <svg class="icon"><use href="#i-user"></use></svg><span>Account Information</span>
+        </button>
+        <button class="menu-item" type="button" role="menuitem" data-profile-action="Security">
+          <svg class="icon"><use href="#i-shield"></use></svg><span>Security</span>
+        </button>
+        <button class="menu-item" type="button" role="menuitem" data-profile-action="Admin Panel">
+          <svg class="icon"><use href="#i-settings"></use></svg><span>Admin Panel</span>
+        </button>
+        <button class="menu-item menu-item-danger" type="button" role="menuitem" data-profile-action="Logout">
+          <svg class="icon"><use href="#i-logout"></use></svg><span>Logout</span>
+        </button>
+      </section>
+    </header>
+
+    <main class="app-main" id="mainContent" tabindex="-1">
+      <section class="page home-page is-active" id="page-home" data-page="home">
+        <article class="welcome-card reveal">
+          <div class="welcome-copy">
+            <p class="welcome-hello">Welcome Back,</p>
+            <h1 class="welcome-name" data-bind="welcomeName"></h1>
+            <p class="welcome-tagline">Invest Smart. Grow Together.</p>
+          </div>
+        </article>
+
+        <div class="metric-grid reveal" style="--delay:.08s">
+          <article class="metric-card">
+            <span class="metric-label">Invested Amount</span>
+            <strong data-bind="invested"></strong>
+            <span class="metric-note">Total principal added</span>
+          </article>
+          <article class="metric-card">
+            <span class="metric-label">Active Investment</span>
+            <strong data-bind="activeInvestment"></strong>
+            <span class="metric-status"><i aria-hidden="true"></i> Running on Profits</span>
+          </article>
+          <article class="metric-card">
+            <span class="metric-label">Actual Amount</span>
+            <strong data-bind="actualAmount"></strong>
+            <span class="metric-note">Profit: <span data-bind="profitAmount"></span></span>
+          </article>
+        </div>
+
+        <div class="action-grid reveal" style="--delay:.12s">
+          <button class="action-btn action-invest" type="button" data-route="invest">
+            <svg class="icon"><use href="#i-trend"></use></svg>
+            <span>Invest Now</span>
+          </button>
+          <button class="action-btn action-withdraw" type="button" data-route="withdraw">
+            <svg class="icon"><use href="#i-wallet"></use></svg>
+            <span>Withdraw</span>
+          </button>
+          <button class="action-btn action-deposit" type="button" data-route="deposit">
+            <svg class="icon"><use href="#i-deposit"></use></svg>
+            <span>Deposit (Demo)</span>
+          </button>
+        </div>
+
+        <article class="overview-card reveal" id="overviewCard" style="--delay:.18s">
+          <div class="overview-head">
+            <span class="section-icon"><svg class="icon"><use href="#i-chart-bar"></use></svg></span>
+            <h2>Investment Overview</h2>
+            <button class="text-link" type="button" data-route="invest">View All <svg class="icon"><use href="#i-arrow-right"></use></svg></button>
+          </div>
+          <div class="overview-stats">
+            <div>
+              <strong class="overview-amount" data-bind="invested"></strong>
+              <p class="card-label">Total Invested</p>
+              <p class="overview-sub">Actual amount: <span data-bind="actualAmount"></span></p>
+            </div>
+            <span class="growth-pill growth-pill-soft" data-bind="investGrowth"></span>
+          </div>
+          <div class="chart-wrap" id="chartWrap">
+            <svg class="investment-chart" id="investmentChart" viewBox="0 0 320 150" preserveAspectRatio="none" aria-label="Investment growth chart" role="img">
+              <defs>
+                <linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#00D99A" stop-opacity=".32"/>
+                  <stop offset=".55" stop-color="#00D99A" stop-opacity=".1"/>
+                  <stop offset="1" stop-color="#00D99A" stop-opacity="0"/>
+                </linearGradient>
+                <linearGradient id="chartStroke" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0" stop-color="#00B982"/>
+                  <stop offset="1" stop-color="#00D99A"/>
+                </linearGradient>
+              </defs>
+              <g id="chartGrid" class="chart-grid"></g>
+              <path class="chart-area" id="chartArea" fill="url(#chartFill)"></path>
+              <path class="chart-line" id="chartLine" fill="none" stroke="url(#chartStroke)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+              <line id="chartCrosshair" class="chart-crosshair"></line>
+              <g id="chartPoints"></g>
+            </svg>
+            <div class="chart-tooltip" id="chartTooltip" role="status" hidden>
+              <strong id="tooltipValue"></strong>
+              <span id="tooltipDate"></span>
+            </div>
+            <p class="chart-empty" id="chartEmpty" hidden>No investments yet. Your actual amount will appear here once a plan is active.</p>
+          </div>
+        </article>
+
+        <section class="transactions-section reveal" style="--delay:.24s">
+          <div class="section-head">
+            <span class="section-icon"><svg class="icon"><use href="#i-history"></use></svg></span>
+            <h2>Recent Transactions</h2>
+            <button class="text-link" type="button" data-route="history">View All <svg class="icon"><use href="#i-arrow-right"></use></svg></button>
+          </div>
+          <div class="transaction-card" id="transactionList"></div>
+        </section>
+      </section>
+
+      <section class="page sub-page" id="page-deposit" data-page="deposit" hidden>
+        <div class="sub-top">
+          <button class="back-button" type="button" data-route="home" aria-label="Back to dashboard"><svg class="icon"><use href="#i-chevron-left"></use></svg></button>
+          <h1>Deposit</h1>
+        </div>
+        <div class="sub-hero sub-hero-gold">
+          <span class="sub-hero-icon"><svg class="icon"><use href="#i-deposit"></use></svg></span>
+          <p class="card-label">Available Balance</p>
+          <strong class="sub-value" data-bind="walletBalance"></strong>
+        </div>
+        <div class="sub-card">
+          <span class="sub-card-icon"><svg class="icon"><use href="#i-deposit"></use></svg></span>
+          <h2>Add funds</h2>
+          <p>Demo deposit: enter an amount and it will be added to your available balance right away.</p>
+          <form id="depositForm" class="sub-form" novalidate>
+            <div class="field">
+              <label for="depositAmount">Amount (USD)</label>
+              <input id="depositAmount" name="amount" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="0.00" required>
+            </div>
+            <p class="form-error" id="depositError" role="alert"></p>
+            <button class="primary-small" type="submit">Deposit Funds</button>
+          </form>
+        </div>
+      </section>
+
+      <section class="page sub-page" id="page-invest" data-page="invest" hidden>
+        <div class="sub-top">
+          <button class="back-button" type="button" data-route="home" aria-label="Back to dashboard"><svg class="icon"><use href="#i-chevron-left"></use></svg></button>
+          <h1>Invest</h1>
+        </div>
+        <div class="sub-hero">
+          <span class="sub-hero-icon"><svg class="icon"><use href="#i-trend"></use></svg></span>
+          <p class="card-label">Total Invested</p>
+          <strong class="sub-value" data-bind="invested"></strong>
+          <span class="growth-pill" data-bind="investGrowth"></span>
+          <p class="sub-hero-balance">Available to invest: <strong data-bind="walletBalance"></strong></p>
+        </div>
+        <div class="sub-card">
+          <span class="sub-card-icon"><svg class="icon"><use href="#i-trend"></use></svg></span>
+          <h2>Add to your investment</h2>
+          <p>Move funds from your available balance into your portfolio. Each investment becomes a real point on the overview chart.</p>
+          <form id="investForm" class="sub-form" novalidate>
+            <div class="field">
+              <label for="investPlan">Investment plan</label>
+              <select id="investPlan" name="plan" required></select>
+            </div>
+            <div class="field">
+              <label for="investAmount">Amount (USD)</label>
+              <input id="investAmount" name="amount" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="0.00" data-max-balance required>
+            </div>
+            <p class="form-error" id="investError" role="alert"></p>
+            <button class="primary-small" type="submit">Invest Funds</button>
+          </form>
+        </div>
+        <div class="sub-card active-investments-card">
+          <span class="sub-card-icon"><svg class="icon"><use href="#i-trend"></use></svg></span>
+          <h2>Active investments</h2>
+          <p>Each active plan shows the principal running now and the actual amount you will receive at maturity.</p>
+          <div id="activeInvestmentList" class="active-investment-list"></div>
+        </div>
+      </section>
+
+      <section class="page sub-page" id="page-withdraw" data-page="withdraw" hidden>
+        <div class="sub-top">
+          <button class="back-button" type="button" data-route="home" aria-label="Back to dashboard"><svg class="icon"><use href="#i-chevron-left"></use></svg></button>
+          <h1>Withdraw</h1>
+        </div>
+        <div class="sub-hero sub-hero-gold">
+          <span class="sub-hero-icon"><svg class="icon"><use href="#i-wallet"></use></svg></span>
+          <p class="card-label">Available Balance</p>
+          <strong class="sub-value" data-bind="walletBalance"></strong>
+        </div>
+        <div class="sub-card">
+          <span class="sub-card-icon"><svg class="icon"><use href="#i-wallet"></use></svg></span>
+          <h2>Request a withdrawal</h2>
+          <p>Requests are reviewed before payout. Your available balance changes now and the transaction shows as Pending.</p>
+          <form id="withdrawForm" class="sub-form" novalidate>
+            <div class="field">
+              <label for="withdrawAmount">Amount (USD)</label>
+              <input id="withdrawAmount" name="amount" type="number" min="0.01" step="0.01" inputmode="decimal" placeholder="0.00" data-max-balance required>
+            </div>
+            <p class="form-error" id="withdrawError" role="alert"></p>
+            <button class="primary-small" type="submit">Request Withdrawal</button>
+          </form>
+        </div>
+      </section>
+
+      <section class="page sub-page" id="page-support" data-page="support" hidden>
+        <div class="sub-top">
+          <button class="back-button" type="button" data-route="home" aria-label="Back to dashboard"><svg class="icon"><use href="#i-chevron-left"></use></svg></button>
+          <h1>Support</h1>
+        </div>
+        <div class="sub-hero">
+          <span class="sub-hero-icon"><svg class="icon"><use href="#i-support"></use></svg></span>
+          <h2>We are here to help</h2>
+          <p>Questions about your account, investments or withdrawals? Send a message and the admin will reply here.</p>
+        </div>
+        <div class="sub-card">
+          <span class="sub-card-icon"><svg class="icon"><use href="#i-info"></use></svg></span>
+          <h2>Send a message</h2>
+          <p>Your messages are saved to this device and sent straight to the admin support inbox.</p>
+          <form id="supportForm" class="sub-form" novalidate>
+            <div class="field">
+              <label for="supportSubject">Subject</label>
+              <input id="supportSubject" type="text" maxlength="120" placeholder="e.g. Withdrawal question" required>
+            </div>
+            <div class="field">
+              <label for="supportMessage">Message</label>
+              <textarea id="supportMessage" rows="5" maxlength="2000" placeholder="Tell us what you need help with..." required></textarea>
+            </div>
+            <p class="form-error" id="supportError" role="alert"></p>
+            <button class="primary-small" type="submit">Send Message</button>
+          </form>
+        </div>
+        <div class="sub-card">
+          <span class="sub-card-icon"><svg class="icon"><use href="#i-history"></use></svg></span>
+          <h2>Your messages</h2>
+          <p>Replies from admin appear under each message.</p>
+          <div id="supportList" class="support-list"></div>
+        </div>
+      </section>
+
+      <section class="page sub-page" id="page-settings" data-page="settings" hidden>
+        <div class="sub-top">
+          <button class="back-button" type="button" data-route="home" aria-label="Back to dashboard"><svg class="icon"><use href="#i-chevron-left"></use></svg></button>
+          <h1>Settings</h1>
+        </div>
+        <div class="settings-card" id="accountInfoCard">
+          <div class="settings-head">
+            <span class="settings-icon"><svg class="icon"><use href="#i-user"></use></svg></span>
+            <div>
+              <h2>Account Information</h2>
+              <p>Update the name and email address used on your account.</p>
+            </div>
+          </div>
+          <form id="accountForm" class="sub-form" novalidate>
+            <div class="field">
+              <label for="accountName">Full name</label>
+              <input id="accountName" name="name" type="text" autocomplete="name" required>
+            </div>
+            <div class="field">
+              <label for="accountEmail">Email address</label>
+              <input id="accountEmail" name="email" type="email" autocomplete="email" required>
+            </div>
+            <p class="form-error" id="accountError" role="alert"></p>
+            <button class="primary-small" type="submit">Save Changes</button>
+          </form>
+        </div>
+
+        <div class="settings-card" id="securityCard">
+          <div class="settings-head">
+            <span class="settings-icon"><svg class="icon"><use href="#i-shield"></use></svg></span>
+            <div>
+              <h2>Security</h2>
+              <p>Change your password. You will need your current password to confirm it.</p>
+            </div>
+          </div>
+          <form id="passwordForm" class="sub-form" novalidate>
+            <div class="field">
+              <label for="currentPassword">Current password</label>
+              <input id="currentPassword" name="currentPassword" type="password" autocomplete="current-password" required>
+            </div>
+            <div class="field">
+              <label for="newPassword">New password</label>
+              <input id="newPassword" name="newPassword" type="password" autocomplete="new-password" required>
+            </div>
+            <div class="field">
+              <label for="confirmPassword">Confirm new password</label>
+              <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" required>
+            </div>
+            <p class="form-error" id="passwordError" role="alert"></p>
+            <button class="primary-small" type="submit">Update Password</button>
+          </form>
+        </div>
+
+        <div class="settings-card">
+          <div class="settings-head">
+            <span class="settings-icon"><svg class="icon"><use href="#i-settings"></use></svg></span>
+            <div>
+              <h2>Appearance</h2>
+              <p>Choose how SMART PIPS looks on this device.</p>
+            </div>
+          </div>
+          <div class="theme-options" role="radiogroup" aria-label="Color mode">
+            <button class="theme-option is-selected" type="button" data-theme-option="light" role="radio" aria-checked="true">
+              <span class="theme-swatch theme-swatch-light"><svg class="icon"><use href="#i-sun"></use></svg></span>
+              <span class="theme-copy"><strong>Light Mode</strong><small>Clean and bright for everyday use</small></span>
+              <span class="theme-check"><svg class="icon"><use href="#i-check-circle"></use></svg></span>
+            </button>
+            <button class="theme-option" type="button" data-theme-option="dark" role="radio" aria-checked="false">
+              <span class="theme-swatch theme-swatch-dark"><svg class="icon"><use href="#i-moon"></use></svg></span>
+              <span class="theme-copy"><strong>Dark Mode</strong><small>Sleek and easy on the eyes</small></span>
+              <span class="theme-check"><svg class="icon"><use href="#i-check-circle"></use></svg></span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="page sub-page" id="page-history" data-page="history" hidden>
+        <div class="sub-top">
+          <button class="back-button" type="button" data-route="home" aria-label="Back to dashboard"><svg class="icon"><use href="#i-chevron-left"></use></svg></button>
+          <h1>Transaction History</h1>
+        </div>
+        <div class="transaction-card history-card" id="historyList"></div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" id="bottomNav" aria-label="Primary navigation">
+      <span class="nav-indicator" id="navIndicator" aria-hidden="true"></span>
+      <button class="nav-item is-active" type="button" data-route="home" aria-current="page">
+        <svg class="icon"><use href="#i-home"></use></svg><span>Home</span>
+      </button>
+      <button class="nav-item" type="button" data-route="deposit">
+        <svg class="icon"><use href="#i-deposit"></use></svg><span>Deposit</span>
+      </button>
+      <button class="nav-item" type="button" data-route="invest">
+        <svg class="icon"><use href="#i-chart-bar"></use></svg><span>Invest</span>
+      </button>
+      <button class="nav-item" type="button" data-route="withdraw">
+        <svg class="icon"><use href="#i-wallet"></use></svg><span>Withdraw</span>
+      </button>
+      <button class="nav-item" type="button" data-route="support">
+        <svg class="icon"><use href="#i-support"></use></svg><span>Support</span>
+      </button>
+    </nav>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </div>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>

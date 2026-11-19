@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#F3F6F5">
+  <link rel="icon" type="image/svg+xml" href="images/smart-pips-logo.svg">
+  <script>try{var t=localStorage.getItem("sp-theme");if(t==="dark"||t==="light")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+  <title>Log In | Smart Pips Invest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="site.css">
+</head>
+<body class="auth-page">
+  <svg class="svg-defs" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="i-check" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8.5"/>
+      <path d="m8.5 12 2.5 2.5 4.5-5"/>
+    </symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24">
+      <path d="m3 17 6-6 4 4 8-8"/>
+      <path d="M15 7h6v6"/>
+    </symbol>
+    <symbol id="i-wallet" viewBox="0 0 24 24">
+      <path d="M4 8.5V7a2 2 0 0 1 2-2h11.5"/>
+      <rect x="4" y="8.5" width="16" height="10.5" rx="3"/>
+      <path d="M15 14h5"/>
+    </symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24">
+      <rect x="5" y="10" width="14" height="10" rx="2.5"/>
+      <path d="M8 10V7a4 4 0 0 1 8 0v3"/>
+    </symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="4"/>
+      <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
+    </symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24">
+      <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5Z"/>
+    </symbol>
+  </svg>
+
+  <div class="auth-top">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-label="Switch color mode">
+      <svg class="icon icon-sun"><use href="#i-sun"></use></svg>
+      <svg class="icon icon-moon"><use href="#i-moon"></use></svg>
+    </button>
+    <a class="btn btn-outline btn-small" href="index.html">Home</a>
+  </div>
+
+  <div class="auth-layout">
+    <aside class="auth-aside">
+      <a class="brand" href="index.html" aria-label="Smart Pips Invest home">
+        <span class="brand-mark"><img class="brand-logo" src="images/smart-pips-logo.svg" alt=""></span>
+        <span class="brand-copy">
+          <span class="brand-name">SMART PIPS</span>
+          <span class="brand-sub">INVEST</span>
+        </span>
+      </a>
+      <div>
+        <h2>Welcome back to your investment space.</h2>
+        <p>Your portfolio, wallet balance and activity are waiting for you in one clean dashboard.</p>
+        <ul class="auth-bullets">
+          <li><svg class="icon"><use href="#i-check"></use></svg> Track your growth at a glance</li>
+          <li><svg class="icon"><use href="#i-chart"></use></svg> Follow your investment overview</li>
+          <li><svg class="icon"><use href="#i-wallet"></use></svg> Review recent transactions</li>
+        </ul>
+      </div>
+      <p>Invest smart. Grow together.</p>
+    </aside>
+
+    <section class="auth-form-side">
+      <div class="auth-form-head">
+        <h1>Log in to your account</h1>
+        <p>Enter your details to open your dashboard.</p>
+      </div>
+      <form id="loginForm" novalidate>
+        <div class="field">
+          <label for="loginEmail">Email address</label>
+          <input id="loginEmail" name="email" type="email" placeholder="you@example.com" autocomplete="email" required>
+        </div>
+        <div class="field">
+          <label for="loginPassword">Password</label>
+          <input id="loginPassword" name="password" type="password" placeholder="Enter your password" autocomplete="current-password" required>
+        </div>
+        <p class="form-error" id="loginError" role="alert" aria-live="polite"></p>
+        <button class="btn btn-primary auth-submit" type="submit"><svg class="icon"><use href="#i-lock"></use></svg> Log In</button>
+      </form>
+      <p class="auth-switch">New to Smart Pips? <a href="signup.html">Sign up now</a></p>
+      <p class="auth-footnote"><svg class="icon"><use href="#i-lock"></use></svg> Accounts are stored locally on this device</p>
+    </section>
+  </div>
+  <script src="auth.js"></script>
+</body>
+</html>
